@@ -23,7 +23,7 @@ def analyze_spending(odf):
 
 sp = analyze_spending(odf)
 
-def get_purchase_insights(odf):
+def get_purchase_insights(rdf):
     product, product_spending = analyze_spending(odf)
     insights = {
         "product": product,
@@ -54,7 +54,15 @@ if __name__ == "__main__":
                 which country has purchased more books?
               ''')
         rqst = input("Enter your request \n")
-        ai = get_openai_response(rqst)
+        prompt = f"""
+                    You are an AI assistant analyzing Amazon purchase data for a user. The user has provided their purchase data.
+                    Total spending: ${insights['product']}
+                    Monthly spending:
+                    {insights['product_spending']}
+                    The user asks: "{rqst}"
+                    Based on the data, provide insights and guidance on future purchases.
+                    """
+        ai = get_openai_response(prompt)
         print(ai.choices[0].message.content)
         choice = input("Do you whish to continue? \n")
         if choice in ("Y", "y", "yes", "YES"):
